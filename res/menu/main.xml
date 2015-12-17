@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.seven.textedit.MainActivity" >
+    
+	<item android:id="@+id/action_add" android:title="@string/action_add"
+        android:showAsAction="always" />
+	<item android:id="@+id/action_save" android:title="@string/action_save"
+        android:showAsAction="always" />
+	<item android:id="@+id/action_rename" android:title="@string/action_rename"
+        android:showAsAction="never" />
+	<item android:id="@+id/action_remove" android:title="@string/action_remove"
+        android:showAsAction="never" />
+	<item android:id="@+id/action_clear" android:title="@string/action_clear"
+        android:showAsAction="never" />
+	<item android:id="@+id/action_share" android:title="@string/action_share"
+        android:orderInCategory="100" android:showAsAction="never" />
+	<item android:id="@+id/action_capture" android:title="@string/action_capture"
+        android:orderInCategory="100" android:showAsAction="never" />
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" android:showAsAction="never" />
+
+</menu>

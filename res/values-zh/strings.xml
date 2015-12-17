@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">记事本</string>
+    <string name="action_Catalog">目录</string>
+    <string name="title_section1">文件1</string>
+    <string name="title_section2">文件2</string>
+    <string name="title_section3">文件3</string>
+    <string name="navigation_drawer_open">打开导航抽屉</string>
+    <string name="navigation_drawer_close">关闭导航抽屉</string>
+    <string name="action_example">示例动作</string>
+    <string name="action_add">添加</string>
+    <string name="action_remove">删除</string>
+    <string name="action_rename">重命名</string>
+    <string name="action_save">保存</string>
+    <string name="action_clear">清除</string>
+    <string name="action_capture">截屏</string>
+    <string name="action_share">分享</string>
+    <string name="action_settings">设置</string>
+    
+    <string name="dialog_input_name">请输入文件名：</string>
+    <string name="dialog_add">添加</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_ignore">忽略</string>
+    
+    <string name="dialog_delete_text">删除文件：</string>
+    <string name="dialog_if_delete">是否删除文件？</string>
+    <string name="dialog_delete">删除</string>
+    
+    <string name="dialog_rename_text">请修改文件名：</string>
+    <string name="dialog_modify">修改</string>
+    
+    <string name="dialog_clear_text">清空文件内容：</string>
+    <string name="dialog_if_clear">是否清空文件？</string>
+    <string name="dialog_clear">清空</string>
+</resources>

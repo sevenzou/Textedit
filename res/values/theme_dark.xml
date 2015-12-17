@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="NightTheme" parent="@style/MyTheme">
+        <item name="text_color">@color/text_night</item>
+        <item name="bg_color">@color/bg_night</item>
+        <item name="line_color">@color/line_night</item>
+        <item name="action_bar">@color/actionbar_night</item>
+        <item name="menu">@drawable/menu_night</item>
+    </style>
+
+    <style name="DayTheme" parent="@style/MyTheme">
+        <item name="text_color">@color/text_day</item>
+        <item name="bg_color">@color/bg_day</item>
+        <item name="line_color">@color/line_day</item>
+        <item name="action_bar">@color/actionbar_day</item>
+        <item name="menu">@drawable/menu</item>
+    </style>
+
+</resources>
