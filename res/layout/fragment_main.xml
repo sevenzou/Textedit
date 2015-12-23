@@ -6,6 +6,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:focusable="true"
+	android:focusableInTouchMode="true"
     tools:context="com.seven.textedit.MainActivity$PlaceholderFragment" >
 	<EditText
 	    android:id="@+id/textName"
@@ -15,9 +17,11 @@
 	    android:paddingRight="3dip"
 	    android:singleLine="true"
 	    android:inputType="text"
-	    android:hint="name"
-	    android:background="@drawable/bg_edittext"
+	    android:hint="textname"
+	    android:background="@null"
 	    />
+	    <!-- android:background="@drawable/bg_edittext" -->
+	    
     <EditText
         android:id="@+id/section_label"
         android:layout_below="@id/textName"

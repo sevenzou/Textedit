@@ -62,10 +62,12 @@ public class TextFragment extends BaseTextFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//		editText = (EditText) rootView.findViewById(R.id.section_label);
 		Log.v("TAG", "TextFragment->onCreateView() - entry");
+		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+		setEditNameView((EditText) rootView.findViewById(R.id.textName));
 		setEditTextView((EditText) rootView.findViewById(R.id.section_label));
+		getEditNameView().setEnabled(false);
+//		getEditTextView().setEnabled(false);
 		getEditTextView().setOnEditorActionListener(new OnEditorActionListener() {
 
 			@Override
@@ -93,15 +95,12 @@ public class TextFragment extends BaseTextFragment {
 			}
 			
 		});
-		this.curPos = txManager.getCurrentPos();
-		Log.v("TAG", "TextFragment->onCreateView():curPos:"+curPos);
+		
 		if (txManager.getTextList().size() > 0) {
+			this.curPos = txManager.getCurrentPos();
+			Log.v("TAG", "TextFragment->onCreateView():curPos:"+curPos);
 			Log.v("TAG", "TextFragment->onCreateView():txManager.getTextList().get(curPos):"+txManager.getTextList().get(curPos));
-			String text = txManager.getTextContent(curPos, txManager.getTextList().get(curPos));
-			Log.v("TAG", "TextFragment->onCreateView():text:"+text);
-			getEditTextView().setText(text);
-			if (text.length() > 0)
-				getEditTextView().setSelection(text.length()-1); //设置光标位置在文件尾
+			setTextFromList(curPos);
 		}
 		
 		return rootView;
@@ -159,19 +158,33 @@ public class TextFragment extends BaseTextFragment {
 		Log.v("TAG", "TextFragment->onHiddenChanged():prePos:"+prePos);
 		Log.v("TAG", "TextFragment->onHiddenChanged():textCount:"+textCount);
 		if (curPos <= -1 || textCount == 0) {
-			getEditTextView().setText(text);
+			setText(text, text);
 			return;
 		} else if (curPos >= 0) {
 			if (hidden == false) {
-				text = txManager.getTextContent(curPos, txManager.getTextList().get(curPos));
-				getEditTextView().setText(text);
-				Log.v("TAG", "TextFragment->onHiddenChanged():text.length():"+text.length());
-				if (text.length() > 0)
-					getEditTextView().setSelection(text.length()-1); //设置光标位置在文件尾
+				setTextFromList(curPos);
 			}
 		}
 		
 		Log.v("TAG", "TextFragment->onHiddenChanged():text:"+text);
+	}
+	
+	public void setText(String name, String text)
+	{
+		getEditNameView().setText(name);
+		getEditTextView().setText(text);
+	}
+	
+	public void setTextFromList(int pos)
+	{
+		String textName = txManager.getTextName(txManager.getTextList().get(pos));
+		String textContent = txManager.getTextContent(pos, txManager.getTextList().get(pos));
+		Log.v("TAG", "TextFragment->setText():textName:"+textName);
+		Log.v("TAG", "TextFragment->setText():textContent:"+textContent);
+		Log.v("TAG", "TextFragment->setText():text.length():"+textContent.length());
+		setText(textName, textContent);
+//		if (textContent.length() > 0)
+//			getEditTextView().setSelection(textContent.length()-1); //设置光标位置在文件尾
 	}
 
 }

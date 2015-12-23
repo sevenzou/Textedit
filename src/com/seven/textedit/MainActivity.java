@@ -65,7 +65,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		// update the main content by show fragments
 		Log.v(TAG, "onNavigationDrawerItemSelected:position"+position);
 		Log.v(TAG, "onNavigationDrawerItemSelected:txManager"+TextManager.getInstance());
-		if (TextManager.getInstance() != null)
+		if (TextManager.getInstance() != null && position >= 0)
 			TextManager.getInstance().showTextFragment(MainActivity.this, position);
 	}
 

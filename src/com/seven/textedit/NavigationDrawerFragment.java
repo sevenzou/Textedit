@@ -125,6 +125,7 @@ public class NavigationDrawerFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Log.v("TAG", "onItemClick():position"+position);
+				//save(mCurrentSelectedPosition);
 				selectItem(position);
 			}
 		});
@@ -312,9 +313,6 @@ public class NavigationDrawerFragment extends Fragment {
 		if (item.getItemId() == R.id.action_save) {
 			Log.v("TAG", "onOptionsItemSelected():mCurrentSelectedPosition"+mCurrentSelectedPosition);
 			save(mCurrentSelectedPosition);
-			if (mCallbacks != null) {
-				mCallbacks.onNavigationDrawerItemSaveText(mCurrentSelectedPosition);
-			}
 			
 			return true;
 		}
@@ -600,6 +598,10 @@ public class NavigationDrawerFragment extends Fragment {
 			setToFirstPos(mCurrentSelectedPosition);
 		}
 		selectItem(mCurrentSelectedPosition);
+		
+		if (mCallbacks != null) {
+			mCallbacks.onNavigationDrawerItemSaveText(mCurrentSelectedPosition);
+		}
 	}
 	
 	/**

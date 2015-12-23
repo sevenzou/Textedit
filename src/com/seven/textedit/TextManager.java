@@ -28,8 +28,8 @@ public class TextManager {
 	private Context context = BaseApplication.getInstance();
 	private int currentPos;
 	private int prePos;
-	private TextFragment tmCurFragment;
-	private TextFragment tmPreFragment;
+	private BaseTextFragment tmCurFragment;
+	private BaseTextFragment tmPreFragment;
 	private static Map<String, BaseTextFragment> txFragmentMap = new HashMap<String, BaseTextFragment>();
 	private static List<String> txContentList = new ArrayList<String>();
 //	private static SharedPreferences sp = null;
@@ -410,16 +410,17 @@ public class TextManager {
 		boolean oneTextFragment = true;
 		if (oneTextFragment) {
 			if (tmCurFragment == null) {
-				tmCurFragment = TextFragment.newInstance(index);
+//				tmCurFragment = TextFragment.newInstance(index);
+				tmCurFragment = ViewFragment.newInstance();
 				addTextFragment(0+"", tmCurFragment);
 			}
 			if (getPrePos() != -1) {
-				tmPreFragment = (TextFragment)getTextFragment(0+"");
+				tmPreFragment = getTextFragment(0+"");
 				hideTextFragment(activity, 0);
 			}
 			
 		} else {
-			tmCurFragment = (TextFragment)getTextFragment(index+"");
+			tmCurFragment = getTextFragment(index+"");
 			Log.v("TAG", "showTextFragment():getTextFragment:"+tmCurFragment);
 			
 			if (tmCurFragment == null) {
@@ -428,7 +429,7 @@ public class TextManager {
 			}
 			
 			if (getPrePos() != -1) {
-				tmPreFragment = (TextFragment)getTextFragment(getPrePos()+"");
+				tmPreFragment = getTextFragment(getPrePos()+"");
 				hideTextFragment(activity, getPrePos());
 			}
 		}
@@ -449,7 +450,7 @@ public class TextManager {
 	{
 		Log.v("TAG", "hideTextFragment():index:"+index);
 		FragmentManager fragmentManager = activity.getFragmentManager();
-		TextFragment tmFragment = (TextFragment)getTextFragment(index+"");
+		BaseTextFragment tmFragment = getTextFragment(index+"");
 		Log.v("TAG", "hideTextFragment():tmFragment:"+tmFragment);
 		if (tmFragment != null)
 			fragmentManager.beginTransaction().hide(tmFragment).commit();

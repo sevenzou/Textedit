@@ -7,11 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class BaseTextFragment extends Fragment {
 
 	private Activity activity = null;
 	private int containerId = 0;
+	private TextView viewName;
+	private TextView viewText;
+	private EditText editName;
 	private EditText editText;
 	
 	public void setContainerId(int containerId)
@@ -24,14 +28,44 @@ public class BaseTextFragment extends Fragment {
 		return this.containerId;
 	}
 	
+	public void setNameView(TextView name)
+	{
+		this.viewName = name;
+	}
+	
+	public void setTextView(TextView text)
+	{
+		this.viewText = text;
+	}
+	
+	public void setEditNameView(EditText et)
+	{
+		this.editName = et;
+	}
+	
 	public void setEditTextView(EditText et)
 	{
 		this.editText = et;
 	}
 	
+	public TextView getNameView()
+	{
+		return this.viewName;
+	}
+	
+	public TextView getTextView()
+	{
+		return this.viewText;
+	}
+	
+	public EditText getEditNameView()
+	{
+		return this.editName;
+	}
+	
 	public EditText getEditTextView()
 	{
-		return editText;
+		return this.editText;
 	}
 	
 	public void saveEditText()
