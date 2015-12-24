@@ -1,12 +1,21 @@
 package com.seven.textedit;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import android.app.ActionBar;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -31,33 +40,57 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		super.onCreate(savedInstanceState);
 		txManager = TextManager.getInstance();
 		txManager.textListInit();
+		Log.v(TAG, "onCreate:txManager:"+txManager);
 		
 		setContentView(R.layout.activity_main);
 		//getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
+		Button edit = (Button)findViewById(R.id.edit);
+		Button capture = (Button)findViewById(R.id.capture);
+		Button share = (Button)findViewById(R.id.share);
+		Button setting = (Button)findViewById(R.id.setting);
 		
-		Log.v(TAG, "onCreate:txManager:"+txManager);
-//		ActionBar actionBar = getActionBar();
-//		actionBar.setCustomView(R.layout.edit_text);
-//		EditText search = (EditText) actionBar.getCustomView().findViewById(R.id.search);
-//		search.setOnEditorActionListener(new OnEditorActionListener() {
-//
-//			@Override
-//			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//				// TODO Auto-generated method stub
-//				String tex = v.getText().toString();
-//				v.setText(tex);
-//				Toast.makeText(getApplicationContext(), tex, Toast.LENGTH_LONG).show();
-//				return false;
-//			}
-//			
-//			
-//		});
-//		actionBar.setDisplayOptions(actionBar.DISPLAY_SHOW_CUSTOM | actionBar.DISPLAY_SHOW_HOME);
+		edit.setOnClickListener(new ButtonOnClickListener());
+		capture.setOnClickListener(new ButtonOnClickListener());
+		share.setOnClickListener(new ButtonOnClickListener());
+		setting.setOnClickListener(new ButtonOnClickListener());
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+	}
+	
+	public class ButtonOnClickListener implements View.OnClickListener
+	{
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			switch (v.getId()) {
+			case R.id.edit:
+				Button edit = (Button)findViewById(R.id.edit);
+				if (TextManager.getInstance() != null && TextManager.getInstance().getEditEnable() == false) {
+					TextManager.getInstance().showTextFragment(MainActivity.this, TextManager.getInstance().getCurrentPos(),true);
+					edit.setText(R.string.action_preview);
+				} else {
+					TextManager.getInstance().showTextFragment(MainActivity.this, TextManager.getInstance().getCurrentPos(),false);
+					edit.setText(R.string.action_edit);
+				}
+				break;
+			case R.id.capture:
+				captureScreen(MainActivity.this);
+				break;
+			case R.id.share:
+				Toast.makeText(MainActivity.this, "share", Toast.LENGTH_SHORT).show();
+				break;
+			case R.id.setting:
+				Toast.makeText(MainActivity.this, "setting", Toast.LENGTH_SHORT).show();
+				break;
+			default :
+				break;
+			}
+			
+		}
+		
 	}
 
 	@Override
@@ -66,7 +99,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		Log.v(TAG, "onNavigationDrawerItemSelected:position"+position);
 		Log.v(TAG, "onNavigationDrawerItemSelected:txManager"+TextManager.getInstance());
 		if (TextManager.getInstance() != null && position >= 0)
-			TextManager.getInstance().showTextFragment(MainActivity.this, position);
+			TextManager.getInstance().showTextFragment(MainActivity.this, position, false);
 	}
 
 	public void onSectionAttached(int number) {
@@ -160,6 +193,55 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		Toast.makeText(this, "settings", Toast.LENGTH_SHORT).show();
 	}
 
-	
+	/*
+	 * captureScreen()
+	 * */
+	public void captureScreen(Activity activity)
+	{
+		View v = activity.getWindow().getDecorView();
+		v.setDrawingCacheEnabled(true);
+		v.buildDrawingCache();
+		
+		Bitmap srcBitmap = v.getDrawingCache();
+		Rect frame = new Rect();
+		
+		activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+		
+		int statusHeight = frame.top;
+		Point outSize = new Point();
+		
+		activity.getWindowManager().getDefaultDisplay().getSize(outSize);
+		int width = outSize.x;
+		int height = outSize.y;
+		
+		Bitmap desBitmap = Bitmap.createBitmap(srcBitmap, 0, statusHeight, width, height-statusHeight);
+		
+		v.destroyDrawingCache();
+		
+		FileOutputStream fos = null;
+		    
+        try {
+            File file = File.createTempFile("capture", ".jpg",
+                    new File("/sdcard"));
+
+            fos = new FileOutputStream(file);
+
+            if (null != fos) {
+                // 第五步 ：将屏幕图像保存到sd卡的根目录
+            	desBitmap.compress(Bitmap.CompressFormat.PNG, 90, fos);
+                fos.flush();
+                Toast.makeText(activity, "保存成功" + file.getName(), Toast.LENGTH_SHORT).show();
+            } else {
+            	Toast.makeText(activity, "失败", Toast.LENGTH_SHORT).show();
+            }
+				
+            fos.close();
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+	}
 
 }

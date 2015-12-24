@@ -30,6 +30,9 @@ public class TextManager {
 	private int prePos;
 	private BaseTextFragment tmCurFragment;
 	private BaseTextFragment tmPreFragment;
+	private BaseTextFragment editFragment;
+	private BaseTextFragment viewFragment;
+	private boolean editEnable;
 	private static Map<String, BaseTextFragment> txFragmentMap = new HashMap<String, BaseTextFragment>();
 	private static List<String> txContentList = new ArrayList<String>();
 //	private static SharedPreferences sp = null;
@@ -59,6 +62,8 @@ public class TextManager {
 		prePos = -1;
 		tmCurFragment = null;
 		tmPreFragment = null;
+		viewFragment = null;
+		editEnable = false;
 		Log.v(TAG, "TextManager()!!!");
 	}
 	
@@ -100,6 +105,16 @@ public class TextManager {
 	public void setPrePos(int prePos)
 	{
 		this.prePos = prePos;
+	}
+	
+	public boolean getEditEnable()
+	{
+		return this.editEnable;
+	}
+	
+	public void setEditEnable(boolean enable)
+	{
+		this.editEnable = enable;
 	}
 	
 	/**
@@ -398,42 +413,53 @@ public class TextManager {
 		txFragmentMap.remove(key);
 	}
 	
-	public int showTextFragment(Activity activity, int index)
+	public int showTextFragment(Activity activity, int index, boolean editEnable)
 	{
-		Log.v("TAG", "showTextFragment()-->entry!  index£º"+index);
+		Log.v("TAG", "showTextFragment()-->entry!  index£º"+index+"; editEnable:"+editEnable);
 		FragmentManager fragmentManager = activity.getFragmentManager();
 		View v = activity.getWindow().getDecorView();
 		setPrePos(getCurrentPos());
 		setCurrentPos(index);
 		fragmentManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		//just one text fragment:0
-		boolean oneTextFragment = true;
-		if (oneTextFragment) {
-			if (tmCurFragment == null) {
-//				tmCurFragment = TextFragment.newInstance(index);
-				tmCurFragment = ViewFragment.newInstance();
-				addTextFragment(0+"", tmCurFragment);
+		if (editEnable) {
+			if (editFragment == null) {
+				editFragment = TextFragment.newInstance(index);
+//				addTextFragment(0+"", editFragment);
 			}
 			if (getPrePos() != -1) {
 				tmPreFragment = getTextFragment(0+"");
 				hideTextFragment(activity, 0);
 			}
-			
+			tmCurFragment = editFragment;
 		} else {
-			tmCurFragment = getTextFragment(index+"");
-			Log.v("TAG", "showTextFragment():getTextFragment:"+tmCurFragment);
-			
-			if (tmCurFragment == null) {
-				tmCurFragment = TextFragment.newInstance(index + 1);
-				addTextFragment(index+"", tmCurFragment);
+			if (viewFragment == null) {
+				viewFragment = ViewFragment.newInstance();
+//				addTextFragment(0+"", viewFragment);
 			}
-			
 			if (getPrePos() != -1) {
-				tmPreFragment = getTextFragment(getPrePos()+"");
-				hideTextFragment(activity, getPrePos());
+				tmPreFragment = getTextFragment(0+"");
+				hideTextFragment(activity, 0);
 			}
+			tmCurFragment = viewFragment;
 		}
-		
+		addTextFragment(0+"", tmCurFragment);
+		setEditEnable(editEnable);
+//		else {
+//			tmCurFragment = getTextFragment(index+"");
+//			Log.v("TAG", "showTextFragment():getTextFragment:"+tmCurFragment);
+//			
+//			if (tmCurFragment == null) {
+//				tmCurFragment = TextFragment.newInstance(index + 1);
+//				addTextFragment(index+"", tmCurFragment);
+//			}
+//			
+//			if (getPrePos() != -1) {
+//				tmPreFragment = getTextFragment(getPrePos()+"");
+//				hideTextFragment(activity, getPrePos());
+//			}
+//		}
+		Log.v("TAG", "showTextFragment()-->tmCurFragment£º"+tmCurFragment);
 		if (tmCurFragment.isAdded()) {
 			Log.v("TAG", "showTextFragment():tmFragment.isAdded():"+tmCurFragment.isAdded());
 			fragmentManager.beginTransaction().show(tmCurFragment).commit();
